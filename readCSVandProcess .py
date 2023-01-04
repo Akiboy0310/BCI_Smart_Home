@@ -172,16 +172,17 @@ def addLable(df,label):
     return df
 
 def toDF(coeffs1,coeffs2,coeffs3,coeffs4):
+    columns=['Channel 1', 'Channel 2', 'Channel 3', 'Channel 4','Channel 5', 'Channel 6', 'Channel 7', 'Channel 8' ]
     # Flatten coefficients
     coeffs1 = np.concatenate(coeffs1)
     coeffs2 = np.concatenate(coeffs2)
     coeffs3 = np.concatenate(coeffs3)
     coeffs4 = np.concatenate(coeffs4)
 
-    coeffs1_df = pd.DataFrame(coeffs1)
-    coeffs2_df = pd.DataFrame(coeffs2)
-    coeffs3_df = pd.DataFrame(coeffs3)
-    coeffs4_df = pd.DataFrame(coeffs4)
+    coeffs1_df = pd.DataFrame(coeffs1,columns=columns)
+    coeffs2_df = pd.DataFrame(coeffs2,columns=columns)
+    coeffs3_df = pd.DataFrame(coeffs3,columns=columns)
+    coeffs4_df = pd.DataFrame(coeffs4,columns=columns)
     print(coeffs1_df)
     return coeffs1_df,coeffs2_df,coeffs3_df,coeffs4_df
 
@@ -230,19 +231,21 @@ def test_train_set(data):
     # Split data into features and labels
     features = data.drop(columns=['label'])
     labels = data['label']
+    #print(f"Features are : {features}")
+    #print(f'This are Labels: {labels}')
+    feature_train,feature_test,label_train,label_test = train_test_split(features,labels,test_size=0.10)
 
-    feature_train,label_train,feature_test,label_test = train_test_split(data,labels,test_size=0.20)
-
-    return feature_train,label_train,feature_test,label_test
+    return feature_train,feature_test,label_train,label_test
 
 def train_test_valid_LDA(wavelet_data):
 
-    feature_train,label_train,feature_test,label_test = test_train_set(wavelet_data)
+    feature_train,feature_test,label_train,label_test = test_train_set(wavelet_data)
 
     # create the model
     model = LinearDiscriminantAnalysis()
 
-    #print(train_labels)
+
+    print(f"this are labels:{label_train}")
     # fit the model to the training data
     model.fit(feature_train, label_train)
 
@@ -279,7 +282,7 @@ def train_test_valid_LDA(wavelet_data):
 
 def main():
     # Read the CSV file into a Pandas dataframe
-    df = pd.read_csv('eeg_data.csv')
+    df = pd.read_csv('eeg_data_new.csv')
     df_light_on, df_light_off, df_light_bright, df_light_dim = splitt_df(df)
     clean_light_on = detect_clean_outliers(df_light_on)
     clean_light_off = detect_clean_outliers(df_light_off)
