@@ -1,6 +1,7 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
+import pywt
 from sklearn.model_selection import train_test_split,cross_val_score
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 from scipy.signal import butter, filtfilt, iirnotch, resample
@@ -88,7 +89,15 @@ def filter_eeg_data(b, a, data, columns):
     df_eeg_filtered = pd.DataFrame(eeg_filtered, columns=columns)
     return df_eeg_filtered
 
+def wavelet_transform(df):
+    # Set the wavelet to use for the analysis
+    wavelet = "db4"
 
+    # Perform wavelet transformation
+    coeffs = pywt.wavedec(df, 'db4')
+
+    print(coeffs)
+    return coeffs
 def compute_fft(eeg_filtered):
     # Compute the FFT of the filtered data for each channel
     eeg_fft = {}  # Dictionary to store the FFT for each channel
@@ -162,7 +171,26 @@ def addLable(df,label):
     df['label'] = label
     return df
 
+def toDF(coeffs1,coeffs2,coeffs3,coeffs4):
+    # Flatten coefficients
+    coeffs1 = np.concatenate(coeffs1)
+    coeffs2 = np.concatenate(coeffs2)
+    coeffs3 = np.concatenate(coeffs3)
+    coeffs4 = np.concatenate(coeffs4)
+
+    coeffs1_df = pd.DataFrame(coeffs1)
+    coeffs2_df = pd.DataFrame(coeffs2)
+    coeffs3_df = pd.DataFrame(coeffs3)
+    coeffs4_df = pd.DataFrame(coeffs4)
+    print(coeffs1_df)
+    return coeffs1_df,coeffs2_df,coeffs3_df,coeffs4_df
+
 def concateDf(df1,df2,df3,df4):
+    #add labels to df then concatenate them
+    df1 = addLable(df1, title_light_on)
+    df2 = addLable(df2, title_light_off)
+    df3 = addLable(df3, title_light_bright)
+    df4 = addLable(df4, title_light_dim)
     df = pd.concat([df1,df2,df3,df4])
     return df
 def epoch(df):
@@ -198,28 +226,26 @@ def epoch(df):
             print(epoch)
     return epochs
 
-def test_train_set(epochs):
-    train_set,test_set = train_test_split(epochs,test_size=0.20)
+def test_train_set(data):
+    # Split data into features and labels
+    features = data.drop(columns=['label'])
+    labels = data['label']
 
-    return train_set,test_set
+    feature_train,label_train,feature_test,label_test = train_test_split(data,labels,test_size=0.20)
 
-def train_test_valid_LDA(train_set_splitt,test_set_splitt):
+    return feature_train,label_train,feature_test,label_test
+
+def train_test_valid_LDA(wavelet_data):
+
+    feature_train,label_train,feature_test,label_test = test_train_set(wavelet_data)
+
     # create the model
     model = LinearDiscriminantAnalysis()
-
-    train_set_splitt = pd.concat(train_set_splitt)
-    feature_train  = train_set_splitt[['Channel 1', 'Channel 2', 'Channel 3', 'Channel 4', 'Channel 5', 'Channel 6', 'Channel 7', 'Channel 8']]
-    label_train = train_set_splitt['label']
-
 
     #print(train_labels)
     # fit the model to the training data
     model.fit(feature_train, label_train)
 
-    test_set_splitt = pd.concat(test_set_splitt)
-    print(test_set_splitt)
-    feature_test = test_set_splitt[['Channel 1', 'Channel 2', 'Channel 3', 'Channel 4', 'Channel 5', 'Channel 6', 'Channel 7', 'Channel 8']]
-    label_test = test_set_splitt['label']
     # make predictions on the test data
     prediction = model.predict(feature_test)
     # Compute the accuracy of the classifier on the test data
@@ -273,15 +299,20 @@ def main():
     # clean_light_off.to_csv('light_off_proc.csv', index=False, sep=';')
     # clean_light_bright.to_csv('light_bright_proc.csv', index=False, sep=';')
     # clean_light_dim.to_csv('light_dim_proc.csv', index=False, sep=';')
-    clean_light_on = addLable(clean_light_on,title_light_on)
-    clean_light_off = addLable(clean_light_off,title_light_off)
-    clean_light_bright = addLable(clean_light_bright,title_light_bright)
-    clean_light_dim = addLable(clean_light_dim,title_light_dim)
-    concat_df = concateDf(clean_light_on,clean_light_off,clean_light_bright,clean_light_dim)
+    #clean_light_on = addLable(clean_light_on,title_light_on)
+    #clean_light_off = addLable(clean_light_off,title_light_off)
+    #clean_light_bright = addLable(clean_light_bright,title_light_bright)
+    #clean_light_dim = addLable(clean_light_dim,title_light_dim)
+    #concat_df = concateDf(clean_light_on,clean_light_off,clean_light_bright,clean_light_dim)
     #print(concat_df)
-    concat_df.to_csv('concat_df',index=False,sep=';')
-    epochs = epoch(concat_df)
-    train_set,test_set = test_train_set(epochs)
-    train_test_valid_LDA(train_set, test_set)
+    #concat_df.to_csv('concat_df.csv',index=False,sep=';')
+    coeffs_light_on=wavelet_transform(clean_light_on)
+    coeffs_light_off=wavelet_transform(clean_light_off)
+    coeffs_light_bright=wavelet_transform(clean_light_bright)
+    coeffs_light_dim=wavelet_transform(clean_light_dim)
+    wavelet_light_on_df,wavelet_light_off_df,wavelet_light_bright_df,wavelet_light_dim_df=toDF(coeffs_light_on, coeffs_light_off, coeffs_light_bright, coeffs_light_dim)
+    concat_coeffs = concateDf(wavelet_light_on_df,wavelet_light_off_df,wavelet_light_bright_df,wavelet_light_dim_df)
+    #epochs = epoch(concat_df)
+    train_test_valid_LDA(concat_coeffs)
 if __name__ == '__main__':
     main()
