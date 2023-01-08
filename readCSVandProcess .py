@@ -8,14 +8,15 @@ from scipy.signal import butter, filtfilt, iirnotch, resample
 from sklearn.metrics import accuracy_score,confusion_matrix, ConfusionMatrixDisplay, precision_recall_fscore_support
 from sklearn.model_selection import cross_val_score
 
-# Define the notch filter parameters
+# Define notch filter parameters
 notch_frequency = 50  # The frequency to be rejected (50 Hz)
 Q = 20  # Quality factor
 
-# Define the bandpass filter parameters
-lowcut = 4
-highcut = 30
+# Define bandpass filter parameters
+lowcut = 13
+highcut = 100
 order = 5
+
 fs = 250  # Sampling rate
 
 # Define title of each class
@@ -233,7 +234,7 @@ def test_train_set(data):
     labels = data['label']
     #print(f"Features are : {features}")
     #print(f'This are Labels: {labels}')
-    feature_train,feature_test,label_train,label_test = train_test_split(features,labels,test_size=0.10)
+    feature_train,feature_test,label_train,label_test = train_test_split(features,labels,test_size=0.20)
 
     return feature_train,feature_test,label_train,label_test
 
