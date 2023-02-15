@@ -5,12 +5,10 @@ def test_train_set(data):
     # normalize data
     scaler = MinMaxScaler()
     scaled_data = scaler.fit_transform(features)
-    print(f"Hallo Warum siehst du mich nicht: {scaled_data}")
     labels = data['label']
-    #print(f"Features are : {features}")
-    #print(f'This are Labels: {labels}')
-    feature_train,feature_test,label_train,label_test = train_test_split(features,labels,test_size=0.20)
 
+    feature_train,feature_test,label_train,label_test = train_test_split(features,labels,test_size=0.10)
+    print(label_test)
     return feature_train,feature_test,label_train,label_test
 
 def train_test_valid_LDA(data):
@@ -20,8 +18,6 @@ def train_test_valid_LDA(data):
     # create the model
     model = LinearDiscriminantAnalysis()
 
-
-    print(f"this are labels:{label_train}")
     # fit the model to the training data
     model.fit(feature_train, label_train)
 

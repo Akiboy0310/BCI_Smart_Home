@@ -6,7 +6,7 @@ Q = 20  # Quality factor
 
 # Define bandpass filter parameters
 lowcut = 13
-highcut = 100
+highcut = 60
 order = 5
 
 fs = 250  # Sampling rate
@@ -120,7 +120,7 @@ def filter_transfer_and_plot(df):
     # filter with band pass
     eeg_band_filtered = filter_eeg_data(b, a, df.values, df.columns)
     # filter with noch
-    eeg_noch_filtered = filter_eeg_data(d, c, eeg_band_filtered.values, df.columns)
+    eeg_noch_filtered = filter_eeg_data(d, c, df.values, df.columns)
 
     return eeg_noch_filtered
 
@@ -187,4 +187,10 @@ def process(df):
     df_l2_f = filter_transfer_and_plot(df_l2_c)
     df_l3_f = filter_transfer_and_plot(df_l3_c)
     df_l4_f = filter_transfer_and_plot(df_l4_c)
+    print("Begin")
+    print(df_l1_f)
+    print(df_l2_f)
+    print(df_l3_f)
+    print(df_l4_f)
+    print("End")
     return df_l1_f, df_l2_f, df_l3_f, df_l4_f

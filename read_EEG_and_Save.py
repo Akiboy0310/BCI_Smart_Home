@@ -1,9 +1,4 @@
-from pyOpenBCI import OpenBCICyton
-import csv
-import time
-import os.path
-
-import time
+import utils
 
 start_time = time.time()
 time_limit = 15  # 15 seconds
