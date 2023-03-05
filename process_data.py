@@ -33,10 +33,10 @@ def splitt_df(df):
     df_light_bright = label_dataframes['light_bright']
     df_light_dim = label_dataframes['light_dim']
 
-    print(df_light_on.describe())
-    print(df_light_off.describe())
-    print(df_light_bright.describe())
-    print(df_light_dim.describe())
+    #print(df_light_on.describe())
+    #print(df_light_off.describe())
+    #print(df_light_bright.describe())
+    #print(df_light_dim.describe())
     return df_light_on, df_light_off, df_light_bright, df_light_dim
 
 
@@ -145,7 +145,7 @@ def plotTimeSeries(df, title):
     plt.show()
 
 def epoch(df):
-    print(df.shape[0])
+    #print(df.shape[0])
     # Set the epoch duration
     epoch_duration = 250  # 1 second at 250 samples per second
     overlap = 0.5  # 50% overlap
@@ -166,7 +166,7 @@ def epoch(df):
     for epoch in epochs:
         epoch.reset_index(inplace=True, drop=True)
 
-    print(len(epochs))
+    #print(len(epochs))
 
     #print some infos
     for epoch in epochs:
@@ -187,10 +187,10 @@ def process(df):
     df_l2_f = filter_transfer_and_plot(df_l2_c)
     df_l3_f = filter_transfer_and_plot(df_l3_c)
     df_l4_f = filter_transfer_and_plot(df_l4_c)
-    print("Begin")
-    print(df_l1_f)
-    print(df_l2_f)
-    print(df_l3_f)
-    print(df_l4_f)
-    print("End")
+    #print("Begin")
+    #print(df_l1_f)
+    #print(df_l2_f)
+    #print(df_l3_f)
+    #print(df_l4_f)
+    #print("End")
     return df_l1_f, df_l2_f, df_l3_f, df_l4_f
