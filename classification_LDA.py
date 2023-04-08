@@ -1,4 +1,5 @@
 from utils import *
+import time
 def test_train_set(data):
     # Split data into features and labels
     features = data.drop(columns=['label'])
@@ -52,7 +53,7 @@ def train_test_valid_LDA(data):
     disp.plot()
     plt.show()
 
-def train_test_valid_MLP(data):
+def train_test_valid_MLP(data,hlayers,neurons,maxIter,activation,dataset):
     feature_train,feature_test,label_train,label_test = test_train_set(data)
     # create an instance of LabelEncoder
     le = LabelEncoder()
@@ -61,18 +62,27 @@ def train_test_valid_MLP(data):
     y_train_encoded = le.fit_transform(label_train)
     y_test_encoded = le.transform(label_test)
     # Create an MLP classifier with 2 hidden layers of 5 neurons each
-    model = MLPClassifier(hidden_layer_sizes=(50, 50), max_iter=2000, random_state=1)
-
+    if hlayers == 2:
+        model = MLPClassifier(hidden_layer_sizes=(neurons,neurons), max_iter=maxIter,activation=activation, random_state=1)
+    if hlayers == 4:
+        model = MLPClassifier(hidden_layer_sizes=(neurons, neurons), max_iter=maxIter, activation=activation, random_state=1)
+    if hlayers == 6:
+        model = MLPClassifier(hidden_layer_sizes=(neurons, neurons), max_iter=maxIter, activation=activation, random_state=1)
     # Train the classifier on the training data
     model.fit(feature_train, y_train_encoded)
 
+    #Current Timstamp to seperate model names
+    timestamp = int(time.time() * 1000)
+    #set name for model and save it
+    filename = f"MLP_Models/MLP_model_{hlayers}_{neurons}_{maxIter}_{activation}_dataset{dataset}_{timestamp}.joblib"
+    joblib.dump(model, filename)
     # make predictions on the test data
     prediction = model.predict(feature_test)
 
     # Evaluate the accuracy of the classifier on the test data
     accuracy = accuracy_score(y_test_encoded, prediction)
 
-    print(f'Accuracy MLP: {accuracy:.2f}')
+    print(f'Accuracy MLP_{hlayers}_{neurons}_{maxIter}_{activation}_dataset{dataset}: {accuracy:.2f}')
 
     # transform labels back to strings
     inverse_pred=le.inverse_transform(prediction)
@@ -84,6 +94,7 @@ def train_test_valid_MLP(data):
     cm = (100 * cm.astype('float') / cm.sum(axis=1)[:, np.newaxis])
     cm = cm.astype('int')
 
+    print(f'Confusion Matrix MLP_{hlayers}_{neurons}_{maxIter}_{activation}_dataset{dataset}:\n {cm}')
     # Create confusion matrix display
     disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=le.inverse_transform(model.classes_))
     # Plot confusion matrix
