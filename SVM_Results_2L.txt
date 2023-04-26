@@ -1,0 +1,51 @@
+C:\Users\ahmed\FH\Master_Arbeit\BCI_Algorithm\Scripts\python.exe C:\Users\ahmed\FH\Master_Arbeit\BCI_Algorithm\Scripts\BCI_Smart_Home\main.py 
+Accuracy LDA: 0.60
+Accuracy LDA: 0.59
+Accuracy SVM: 0.59
+SVM_poly_0.5_dataset3:
+ [[45 54]
+ [28 71]]
+Accuracy SVM: 0.64
+SVM_poly_0.5_dataset4:
+ [[61 38]
+ [34 65]]
+Accuracy SVM: 0.59
+SVM_poly_1_dataset3:
+ [[44 55]
+ [26 73]]
+Accuracy SVM: 0.64
+SVM_poly_1_dataset4:
+ [[62 37]
+ [34 65]]
+Accuracy SVM: 0.59
+SVM_poly_3_dataset3:
+ [[44 55]
+ [26 73]]
+Accuracy SVM: 0.64
+SVM_poly_3_dataset4:
+ [[61 38]
+ [32 67]]
+Accuracy SVM: 0.66
+SVM_sigmoid_0.5_dataset3:
+ [[62 37]
+ [30 69]]
+Accuracy SVM: 0.49
+SVM_sigmoid_0.5_dataset4:
+ [[49 50]
+ [50 49]]
+Accuracy SVM: 0.63
+SVM_sigmoid_1_dataset3:
+ [[61 38]
+ [35 64]]
+Accuracy SVM: 0.48
+SVM_sigmoid_1_dataset4:
+ [[48 51]
+ [51 48]]
+Accuracy SVM: 0.45
+SVM_sigmoid_3_dataset3:
+ [[44 55]
+ [55 44]]
+Accuracy SVM: 0.49
+SVM_sigmoid_3_dataset4:
+ [[48 51]
+ [50 49]]
