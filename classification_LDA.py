@@ -28,18 +28,6 @@ def train_test_valid_LDA(data):
     accuracy = accuracy_score(label_test, prediction)
     print(f'Accuracy LDA: {accuracy:.2f}')
 
-    # Calculate the accuracy for each class
-    #classes = list(set(label_test))  # Get the unique class labels
-    #for c in classes:
-        # Select the examples for this class
-    #    y_true_class = [y == c for y in label_test]
-    #    y_pred_class = [y == c for y in prediction]
-
-        # Calculate the accuracy for this class
-    #    accuracy_class = accuracy_score(y_true_class, y_pred_class)
-
-    #    print("Accuracy for class {}: {}".format(c, accuracy_class))
-
     # Generate the confusion matrix
     cm = confusion_matrix(label_test, prediction, labels=model.classes_)
 
@@ -99,4 +87,40 @@ def train_test_valid_MLP(data,hlayers,neurons,maxIter,activation,dataset):
     disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=le.inverse_transform(model.classes_))
     # Plot confusion matrix
     disp.plot()
+    figname = f'MLP_Confusion_Matrix/4labels/Measurement3_4/MLP_{hlayers}_{neurons}_{maxIter}_{activation}_dataset{dataset}.png'
+    plt.savefig(figname)
+    plt.show()
+def train_test_SVM(data,kernel,C,dataset):
+    feature_train,feature_test,label_train,label_test = test_train_set(data)
+
+    #create SVM model
+    model = svm.SVC(kernel=kernel, C=C)
+
+    model.fit(feature_train,label_train)
+
+    # Current Timstamp to seperate model names
+    timestamp = int(time.time() * 1000)
+    # set name for model and save it
+    filename = f"SVM_Models/SVM_{kernel}_{C}_dataset{dataset}_{timestamp}.joblib"
+    joblib.dump(model, filename)
+
+    prediction = model.predict(feature_test)
+
+    accuracy= accuracy_score(label_test,prediction)
+    print(f'Accuracy SVM: {accuracy:.2f}')
+
+    # Generate the confusion matrix
+    cm = confusion_matrix(label_test, prediction, labels=model.classes_)
+
+    # Convert the counts in the confusion matrix to percentages
+    cm = (100 * cm.astype('float') / cm.sum(axis=1)[:, np.newaxis])
+    cm = cm.astype('int')
+    print(f'SVM_{kernel}_{C}_dataset{dataset}:\n {cm}')
+
+    # Create confusion matrix display
+    disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=model.classes_)
+    # Plot confusion matrix
+    disp.plot()
+    figname = f'SVM_Confusion_Matrix/4labels/SVM_{kernel}_{C}_dataset{dataset}.png'
+    plt.savefig(figname)
     plt.show()
