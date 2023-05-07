@@ -25,6 +25,7 @@ These results are achieved using dataset eeg_data_1_method_1.
 Following the Confusion Matrix for both results are demonstrated:
 
 ![MLP_2_400_5000_logistic_dataset1](https://user-images.githubusercontent.com/57944502/236664449-355e1840-c535-4f6c-af5e-c6d65477528b.png)
+
 Confusion Matrix using 4 Labels and MLP Model with Sigmoid as an Activations function, 2 hidden layers, max_iter of 5000 and 400 Neurons per layer.
 
 ![MLP_2_400_2000_logistic_dataset1](https://user-images.githubusercontent.com/57944502/236664509-feb8b5fa-72f3-4098-8d3d-964359acaaf9.png)
