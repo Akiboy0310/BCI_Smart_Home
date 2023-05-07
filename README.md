@@ -7,8 +7,9 @@ Following the used components for the aquisition proccess are shown
 
 ![Hardware_used](https://user-images.githubusercontent.com/57944502/236663596-e4370f7c-38d2-40b1-9dff-7ed441f2aa3e.jpeg)
 
+Four datasets where created with a number of samples ranging from 107 900 for the first dataset to 238 120 for the fourth dataset.
 
-The data is cleaned using the z-score and the 50Hz mains frequency is filtered from the data.
+The data is cleaned using the z-score method and furthermore the 50Hz mains frequency is filtered from the data.
 
 For the feature extraction the Descrete Wavelet Trasnformation is used.
 
